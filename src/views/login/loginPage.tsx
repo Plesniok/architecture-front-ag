@@ -4,11 +4,21 @@ import RequestSender from '../../services/requestSender';
 import { ServiceResponse } from '../../models/responseData';
 import { LoginResponse } from '../../models/loginResponse';
 import { useNavigate } from 'react-router-dom';
+import bcrypt from 'bcryptjs'
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+
+  const salt = bcrypt.genSaltSync(10)
+
+  const hashPassword = (passwordToHash: string) => {
+
+    const hash = bcrypt.hashSync(passwordToHash, '$2a$10$CwTycUXWue0Thq9StjUM0u');
+    console.log(hash);
+    return hash
+  };
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -18,7 +28,7 @@ const Login: React.FC = () => {
         "login",
         {
           "email": email,
-          "password": password
+          "password": hashPassword(password)
         } 
       );
 

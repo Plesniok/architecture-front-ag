@@ -6,11 +6,13 @@ import { ProductLabel } from '../../models/productLabel';
 import AddProductButton from './addProductModal';
 import AddCategoryButton from './addCategory';
 import AddPriceButton from './addPrice';
+import { useNavigate } from 'react-router-dom';
 
 const Products: React.FC = () => {
   const [userRole, setUserRole] = useState<String>("")
   const [productsList, setProductsList] = useState<Array<Product>>([])
   const [productLabel, setProductLabel] = useState<ProductLabel | null>(null)
+  const navigate = useNavigate();
 
   useEffect(() => {
       fetchUserRole()
@@ -69,9 +71,15 @@ const Products: React.FC = () => {
 
       setProductLabel(productLabelResponse?.data ?? null)
   }
+
+  const handleLogout = () => {
+    localStorage.removeItem("token")
+    navigate("/")
+  }
   
   return (
     <div>
+      <button onClick={handleLogout}>Logout</button>
       <h1>Products</h1>
       <p>Welcome to the Products!</p>
       <AddCategoryButton/>
